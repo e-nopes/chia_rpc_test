@@ -26,7 +26,7 @@ async def run_test() -> None:
             print("  There is no wallet_state found yet. Try again shortly")
             return
         else:
-            print('wallet_state is detected')
+            print('Wallet RPC connect success. \nListing Addresses:')
 
         transaction_record = await client.get_transactions('1')
         
@@ -41,21 +41,16 @@ async def run_test() -> None:
 
 
     except Exception as e:
-        if isinstance(e, aiohttp.ClientConnectorError):
-            print(f"Connection error. Check if full node rpc is running at {rpc_port}")
-            print("This is normal if full node is still starting up")
-        else:
-            tb = traceback.format_exc()
-            print(f"Exception trying to run connection check: {tb}")
+        tb = traceback.format_exc()
+        print(f"Exception trying to run test: {tb}")
         return
     finally:
         try:
             client.close()
             await client.await_closed()
         except Exception as e:
-            if not isinstance(e, aiohttp.ClientConnectorError):
-                tb = traceback.format_exc()
-                print(f"Exception trying to close client connection: {tb}")
+            tb = traceback.format_exc()
+            print(f"Exception trying to close client connection: {tb}")
 
 
 
